@@ -3,7 +3,11 @@ import os
 from django.conf import settings
 from django.contrib.staticfiles import utils
 from django.contrib.staticfiles.finders import BaseFinder
-from collections import OrderedDict
+
+try:
+    from collections import OrderedDict as _dict
+except ImportError:
+    from django.utils.datastructures import SortedDict as _dict
 
 from storage import XStaticStorage
 
@@ -17,7 +21,7 @@ class XStaticFinder(BaseFinder):
         # The list of apps that are handled
         self.apps = []
         # Mapping of app module paths to storage instances
-        self.storages = OrderedDict()
+        self.storages = _dict()
         if apps is None:
             apps = settings.INSTALLED_APPS
         for app in apps:
